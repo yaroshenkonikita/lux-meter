@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_lux">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.luxmetr.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_lux"
+        android:name="com.example.luxmetr.ui.luxview.LuxViewFragment"
+        android:label="@string/menu_lux"
+        tools:layout="@layout/fragment_lux" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.luxmetr.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_graph"
+        android:name="com.example.luxmetr.ui.graph.GraphFragment"
+        android:label="@string/menu_graph"
+        tools:layout="@layout/fragment_graph" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.luxmetr.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_info"
+        android:name="com.example.luxmetr.ui.info.InfoFragment"
+        android:label="@string/menu_info"
+        tools:layout="@layout/fragment_info" />
 </navigation>
