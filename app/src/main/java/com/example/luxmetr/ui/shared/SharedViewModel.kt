@@ -35,15 +35,7 @@ class SharedViewModel : ViewModel() {
         }
     }
 
-    fun getMaxChange(): Int {
-        if (luxData.size < 2) return 0
-        var maxChange = 0
-        for (i in 1 until luxData.size) {
-            val change = abs(luxData[i] - luxData[i - 1])
-            if (change > maxChange) {
-                maxChange = change
-            }
-        }
-        return maxChange
+    fun getLuxData(): List<Int> {
+        return luxData.toList()
     }
 }

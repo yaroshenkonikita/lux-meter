@@ -57,24 +57,31 @@ class LuxFragment : Fragment(), SensorEventListener {
         sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
-        return root
-    }
-
-    override fun onResume() {
-        super.onResume()
         lightSensor?.also { sensor ->
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
         handler.post(updateLuxData)
+
+        return root
     }
 
-    override fun onPause() {
-        super.onPause()
-        sensorManager.unregisterListener(this)
-        handler.removeCallbacks(updateLuxData)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        lightSensor?.also { sensor ->
+//            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+//        }
+//        handler.post(updateLuxData)
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        sensorManager.unregisterListener(this)
+//        handler.removeCallbacks(updateLuxData)
+//    }
 
     override fun onDestroyView() {
+        sensorManager.unregisterListener(this)
+        handler.removeCallbacks(updateLuxData)
         super.onDestroyView()
         _binding = null
     }
