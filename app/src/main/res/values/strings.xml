@@ -7,7 +7,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_lux">LuxView</string>
+    <string name="menu_lux">Lux</string>
     <string name="menu_graph">Graph</string>
     <string name="menu_info">Info</string>
+    <string name="lux_value_0">Lux Value: 0</string>
+    <string name="status_unknown">Status: Unknown</string>
 </resources>
