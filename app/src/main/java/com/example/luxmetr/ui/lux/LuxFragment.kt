@@ -11,9 +11,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.luxmetr.R
 import com.example.luxmetr.databinding.FragmentLuxBinding
 import com.example.luxmetr.ui.shared.SharedViewModel
 
@@ -46,13 +49,26 @@ class LuxFragment : Fragment(), SensorEventListener {
 
         val luxValueTextView: TextView = binding.textLuxValue
         val luxStatusTextView: TextView = binding.textLuxStatus
+        val roomTypeSpinner: Spinner = binding.roomTypeSpinner
+        val luxStateTextView: TextView = binding.textLuxState
 
         sharedViewModel.luxValue.observe(viewLifecycleOwner) { it ->
             "Lux Value: $it".also { luxValueTextView.text = it }
+            updateLuxState(it, roomTypeSpinner.selectedItem.toString(), luxStateTextView)
         }
 
         sharedViewModel.luxStatus.observe(viewLifecycleOwner) { it ->
             "Status: $it".also { luxStatusTextView.text = it }
+        }
+
+        roomTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateLuxState(luxValue, roomTypeSpinner.selectedItem.toString(), luxStateTextView)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
         }
 
         sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -63,25 +79,11 @@ class LuxFragment : Fragment(), SensorEventListener {
                 sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
             }
             handler.post(updateLuxData)
-            init = true;
+            init = true
         }
 
         return root
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        lightSensor?.also { sensor ->
-//            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
-//        }
-//        handler.post(updateLuxData)
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        sensorManager.unregisterListener(this)
-//        handler.removeCallbacks(updateLuxData)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -96,5 +98,32 @@ class LuxFragment : Fragment(), SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Do something if sensor accuracy changes
+    }
+
+    private fun updateLuxState(luxValue: Int, roomType: String, stateTextView: TextView) {
+        val state = when (roomType) {
+            "Living Room" -> when {
+                luxValue < 100 -> "Dim"
+                luxValue < 300 -> "Normal"
+                else -> "Bright"
+            }
+            "Bedroom" -> when {
+                luxValue < 50 -> "Dim"
+                luxValue < 150 -> "Normal"
+                else -> "Bright"
+            }
+            "Office" -> when {
+                luxValue < 200 -> "Dim"
+                luxValue < 500 -> "Normal"
+                else -> "Bright"
+            }
+            "Kitchen" -> when {
+                luxValue < 150 -> "Dim"
+                luxValue < 400 -> "Normal"
+                else -> "Bright"
+            }
+            else -> "Unknown"
+        }
+        "State: $state".also { stateTextView.text = it }
     }
 }

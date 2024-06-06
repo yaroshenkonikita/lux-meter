@@ -41,6 +41,22 @@
                 android:textSize="35sp"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="8dp"/>
+
+            <Spinner
+                android:id="@+id/room_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:entries="@array/room_types" />
+
+            <TextView
+                android:id="@+id/text_lux_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/state_unknown"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="16dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

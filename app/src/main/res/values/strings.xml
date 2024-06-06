@@ -12,4 +12,11 @@
     <string name="menu_info">Info</string>
     <string name="lux_value_0">Lux Value: 0</string>
     <string name="status_unknown">Status: Unknown</string>
+    <string name="state_unknown">State: Unknown</string>
+    <string-array name="room_types">
+        <item>Living Room</item>
+        <item>Bedroom</item>
+        <item>Office</item>
+        <item>Kitchen</item>
+    </string-array>
 </resources>
