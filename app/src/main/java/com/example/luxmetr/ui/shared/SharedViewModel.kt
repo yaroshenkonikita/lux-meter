@@ -18,7 +18,7 @@ class SharedViewModel : ViewModel() {
     val luxStatus: LiveData<String> = _luxStatus
 
     private val luxData = mutableListOf<Int>()
-    private val maxDataPoints = 10 * 60 * 10  // 10 minutes, 100ms intervals
+    private val maxDataPoints = 10 * 60  // 1 minute, 100ms intervals
     private var lastSavedTime: Long = 0
 
     fun setLuxValue(value: Int) {

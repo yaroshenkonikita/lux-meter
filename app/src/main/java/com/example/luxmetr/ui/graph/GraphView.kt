@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.min
 
 class GraphView @JvmOverloads constructor(
     context: Context,
@@ -16,7 +17,18 @@ class GraphView @JvmOverloads constructor(
     private var luxData: List<Int> = emptyList()
     private val paint = Paint().apply {
         color = Color.BLUE
-        strokeWidth = 5f
+        strokeWidth = 8f // Увеличение размера линии
+    }
+
+    private val axisPaint = Paint().apply {
+        color = Color.BLACK
+        strokeWidth = 8f
+        textSize = 30f
+    }
+
+    private val textPaint = Paint().apply {
+        color = Color.BLACK
+        textSize = 45f
     }
 
     fun setData(data: List<Int>) {
@@ -28,15 +40,47 @@ class GraphView @JvmOverloads constructor(
         super.onDraw(canvas)
         if (luxData.isEmpty()) return
 
-        val maxLux = luxData.maxOrNull() ?: 1
-        val widthStep = width / (luxData.size - 1).toFloat()
-        val heightScale = height / maxLux.toFloat()
+        val dataSize = luxData.size
+        val totalSize = 600
+        val paddingFromLine = 30f
+        val paddingForValues = 100f
+        val paddingLowLine = 100f
+        val minHeight = paddingLowLine
+        val maxHeight = height.toFloat() - paddingLowLine
 
-        for (i in 0 until luxData.size - 1) {
+        val minLux = ((luxData.minOrNull() ?: 0) * 0.8).toInt()
+        val maxLux = min(((luxData.maxOrNull() ?: 40000) * 1.2).toInt(), 40000)
+        val currentLux = luxData.lastOrNull() ?: 0
+        val widthStep = width / (totalSize - 1).toFloat()
+        val heightScale = height / (maxLux - minLux).toFloat()
+
+        // Draw axes
+        canvas.drawLine(0f, height.toFloat() - paddingLowLine, width.toFloat(), height.toFloat() - paddingLowLine, axisPaint) // X-axis
+        canvas.drawLine(0f, paddingLowLine, 0f, height.toFloat() - paddingLowLine, axisPaint) // Y-axis
+
+        // Draw labels for axes
+        val x = width / 12.toFloat()
+
+        // Seconds labels on X-axis
+        for (i in 0..12) {
+            val secondsAgo = ((totalSize / 10f) - 5f * i.toFloat()).toInt()
+            canvas.drawText("${secondsAgo}s", (x * i.toFloat()), height - paddingFromLine, textPaint)
+        }
+
+        // Min, Max, Current labels on Y-axis
+        canvas.drawText(minLux.toString(), paddingFromLine, height.toFloat() - paddingLowLine - paddingFromLine, textPaint)
+        canvas.drawText(maxLux.toString(), paddingFromLine, paddingForValues, textPaint)
+        canvas.drawText(currentLux.toString(), paddingFromLine, height - (currentLux - minLux) * heightScale, textPaint)
+
+        val delta = totalSize - dataSize
+
+        // Draw the graph
+        for ((iter, i) in (delta until totalSize - 1).withIndex()) {
+            if (iter >= luxData.size - 1) break
             val startX = i * widthStep
-            val startY = height - luxData[i] * heightScale
+            val startY = height - (luxData[iter] - minLux) * heightScale
             val stopX = (i + 1) * widthStep
-            val stopY = height - luxData[i + 1] * heightScale
+            val stopY = height - (luxData[iter + 1] - minLux) * heightScale
             canvas.drawLine(startX, startY, stopX, stopY, paint)
         }
     }

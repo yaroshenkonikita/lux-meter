@@ -27,6 +27,7 @@ class LuxFragment : Fragment(), SensorEventListener {
     private val handler = Handler(Looper.getMainLooper())
 
     private var luxValue: Int = 0
+    private var init: Boolean = false
 
     private val updateLuxData = object : Runnable {
         override fun run() {
@@ -57,10 +58,13 @@ class LuxFragment : Fragment(), SensorEventListener {
         sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
-        lightSensor?.also { sensor ->
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+        if (!init) {
+            lightSensor?.also { sensor ->
+                sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+            }
+            handler.post(updateLuxData)
+            init = true;
         }
-        handler.post(updateLuxData)
 
         return root
     }
@@ -80,8 +84,6 @@ class LuxFragment : Fragment(), SensorEventListener {
 //    }
 
     override fun onDestroyView() {
-        sensorManager.unregisterListener(this)
-        handler.removeCallbacks(updateLuxData)
         super.onDestroyView()
         _binding = null
     }
