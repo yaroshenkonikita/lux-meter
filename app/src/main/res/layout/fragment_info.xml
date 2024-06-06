@@ -1,22 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.info.InfoFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/text_slideshow"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.luxmetr.ui.info.InfoViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        tools:context=".ui.info.InfoFragment">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.appName}"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.description}"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:justificationMode="inter_word"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.featuresTitle}"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="viewStart"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.features}"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:justificationMode="inter_word"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.interfaceTitle}"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="viewStart"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.interfaceDescription}"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:justificationMode="inter_word"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.technicalDetailsTitle}"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="viewStart"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.technicalDetails}"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:justificationMode="inter_word"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.developmentFeaturesTitle}"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="viewStart"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.developmentFeatures}"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:justificationMode="inter_word"/>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
