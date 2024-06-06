@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.max
 import kotlin.math.min
 
 class GraphView @JvmOverloads constructor(
@@ -28,7 +29,7 @@ class GraphView @JvmOverloads constructor(
 
     private val textPaint = Paint().apply {
         color = Color.BLACK
-        textSize = 45f
+        textSize = 40f
     }
 
     fun setData(data: List<Int>) {
@@ -48,15 +49,18 @@ class GraphView @JvmOverloads constructor(
         val minHeight = paddingLowLine
         val maxHeight = height.toFloat() - paddingLowLine
 
-        val minLux = ((luxData.minOrNull() ?: 0) * 0.8).toInt()
-        val maxLux = min(((luxData.maxOrNull() ?: 40000) * 1.2).toInt(), 40000)
+        var minLux = ((luxData.minOrNull() ?: 0)).toInt()
+        var maxLux = min(((luxData.maxOrNull() ?: 40000)).toInt(), 40000)
+        val deltaMinMax = max((maxLux - minLux).toFloat(), 10f)
+        minLux -= (deltaMinMax * 0.1f).toInt()
+        maxLux += (deltaMinMax * 0.1f).toInt()
         val currentLux = luxData.lastOrNull() ?: 0
         val widthStep = width / (totalSize - 1).toFloat()
-        val heightScale = height / (maxLux - minLux).toFloat()
+        val heightScale = (maxHeight - minHeight) / (maxLux - minLux).toFloat()
 
         // Draw axes
-        canvas.drawLine(0f, height.toFloat() - paddingLowLine, width.toFloat(), height.toFloat() - paddingLowLine, axisPaint) // X-axis
-        canvas.drawLine(0f, paddingLowLine, 0f, height.toFloat() - paddingLowLine, axisPaint) // Y-axis
+        canvas.drawLine(0f, maxHeight, width.toFloat(), maxHeight, axisPaint) // X-axis
+        canvas.drawLine(0f, minHeight, 0f, maxHeight, axisPaint) // Y-axis
 
         // Draw labels for axes
         val x = width / 12.toFloat()
@@ -68,9 +72,9 @@ class GraphView @JvmOverloads constructor(
         }
 
         // Min, Max, Current labels on Y-axis
-        canvas.drawText(minLux.toString(), paddingFromLine, height.toFloat() - paddingLowLine - paddingFromLine, textPaint)
-        canvas.drawText(maxLux.toString(), paddingFromLine, paddingForValues, textPaint)
-        canvas.drawText(currentLux.toString(), paddingFromLine, height - (currentLux - minLux) * heightScale, textPaint)
+        canvas.drawText(minLux.toString(), paddingFromLine, maxHeight - paddingFromLine, textPaint)
+        canvas.drawText(maxLux.toString(), paddingFromLine, minHeight + paddingFromLine, textPaint)
+        canvas.drawText(currentLux.toString(), paddingFromLine, maxHeight - (currentLux - minLux) * heightScale, textPaint)
 
         val delta = totalSize - dataSize
 
@@ -78,9 +82,9 @@ class GraphView @JvmOverloads constructor(
         for ((iter, i) in (delta until totalSize - 1).withIndex()) {
             if (iter >= luxData.size - 1) break
             val startX = i * widthStep
-            val startY = height - (luxData[iter] - minLux) * heightScale
+            val startY = maxHeight - (luxData[iter] - minLux) * heightScale
             val stopX = (i + 1) * widthStep
-            val stopY = height - (luxData[iter + 1] - minLux) * heightScale
+            val stopY = maxHeight - (luxData[iter + 1] - minLux) * heightScale
             canvas.drawLine(startX, startY, stopX, stopY, paint)
         }
     }
