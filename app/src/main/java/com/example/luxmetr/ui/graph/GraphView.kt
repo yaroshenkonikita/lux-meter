@@ -49,11 +49,9 @@ class GraphView @JvmOverloads constructor(
         val minHeight = paddingLowLine
         val maxHeight = height.toFloat() - paddingLowLine
 
-        var minLux = ((luxData.minOrNull() ?: 0)).toInt()
-        var maxLux = min(((luxData.maxOrNull() ?: 40000)).toInt(), 40000)
-        val deltaMinMax = max((maxLux - minLux).toFloat(), 1000f)
-        minLux -= (deltaMinMax * 0.1f).toInt()
-        maxLux += (deltaMinMax * 0.1f).toInt()
+        val deltaMinMax = 200f
+        val minLux = ((luxData.minOrNull() ?: 0) - deltaMinMax).toInt()
+        val maxLux = (min(((luxData.maxOrNull() ?: 40000)).toInt(), 40000) + deltaMinMax).toInt()
         val currentLux = luxData.lastOrNull() ?: 0
         val widthStep = width / (totalSize - 1).toFloat()
         val heightScale = (maxHeight - minHeight) / (maxLux - minLux).toFloat()
